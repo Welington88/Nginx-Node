@@ -12,10 +12,9 @@ services:
       - ./node:/usr/src/app
       - /usr/src/app/node_modules
     tty: true
-    ports:
-      -  3000:3000
     depends_on:
       - db
+    command: ["node", "index.js"]
 
   db:
     image: mariadb
@@ -24,9 +23,8 @@ services:
     restart: always
     tty: true
     volumes:
+      - ./mysql:/var/lib/mysql/
       - ./node/.docker/mysql:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
     environment: 
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=password
