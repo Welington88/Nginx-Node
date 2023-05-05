@@ -14,24 +14,35 @@ services:
     tty: true
     ports:
       -  3000:3000
-    depends_on: 
-      - db    
+    depends_on:
+      - db
 
   db:
-    image: mysql               
-    command: --innodb-use-native-aio=0    
+    image: mariadb
+    container_name: mysql
+    command: --innodb-use-native-aio=0
     restart: always
     tty: true
     volumes:
-      - ./mysql:/var/lib/mysql
       - ./node/.docker/mysql:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment: 
       - MYSQL_DATABASE=nodedb
-      - MYSQL_ROOT_PASSWORD=password      
+      - MYSQL_ROOT_PASSWORD=password
+  
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    links:
+      - db
+    ports:
+      - 8090:80
+    environment:
+      - PMA_ARBITRARY=1
 
   nginx:
+    container_name: nginx
     build: 
       context: ./nginx
       dockerfile: Dockerfile

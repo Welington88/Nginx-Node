@@ -6,10 +6,11 @@ const app = express();
 const PORT = 3000;
 
 const config = {
-  host: 'localhost',
+  host: 'db',
   user: 'root',
   password: 'password',
   database: 'nodedb',
+  insecureAuth: true
 };
 
 app.get('/', (req, res) => {
